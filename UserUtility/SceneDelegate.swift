@@ -17,7 +17,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Use this method to optionally configure and attach the UIWindow `window` to the provided UIWindowScene `scene`.
         // If using a storyboard, the `window` property will automatically be initialized and attached to the scene.
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
-        guard let _ = (scene as? UIWindowScene) else { return }
+        guard let objWindowScene = (scene as? UIWindowScene) else { return }
+        
+        self.window = UIWindow.init(windowScene: objWindowScene)
+        
+        let mainStroryboard = UIStoryboard.init(name: "Main", bundle: nil)
+        if let splashViewController = mainStroryboard.instantiateViewController(identifier: "SplashVideoViewController") as? SplashVideoViewController, let objWindow = self.window{
+            let objRootViewController = UINavigationController.init(rootViewController: splashViewController)
+            objRootViewController.navigationBar.isHidden = true
+            objWindow.rootViewController = objRootViewController
+            objWindow.makeKeyAndVisible()
+        }
+        
+        
     }
     func presentAlertOnRootWindow(){
         let objAlertView = UIAlertController.init(title: "Test scene Delegate", message: "Test Scene delegate", preferredStyle: .alert)
