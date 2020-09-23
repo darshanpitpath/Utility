@@ -1,0 +1,6 @@
+framework module Pods_UserUtility {
+  umbrella header "Pods-UserUtility-umbrella.h"
+
+  export *
+  module * { export * }
+}
