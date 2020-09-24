@@ -21,6 +21,7 @@
 		3A6D38A7243C950C00D15B8B /* Utilityclass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A6D38A6243C950C00D15B8B /* Utilityclass.swift */; };
 		3A6D38A9243C957100D15B8B /* APIRequestClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A6D38A8243C957100D15B8B /* APIRequestClient.swift */; };
 		3A6D38AB243C986700D15B8B /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A6D38AA243C986700D15B8B /* User.swift */; };
+		3AC1A1F6251CB83B00E370B5 /* Utility.gif in Resources */ = {isa = PBXBuildFile; fileRef = 3AC1A1F5251CB83B00E370B5 /* Utility.gif */; };
 		66869BDDB858C645A7D9B509 /* Pods_UserUtility.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 44DE6A32391640AFC5A3CB55 /* Pods_UserUtility.framework */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +43,7 @@
 		3A6D38A6243C950C00D15B8B /* Utilityclass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilityclass.swift; sourceTree = "<group>"; };
 		3A6D38A8243C957100D15B8B /* APIRequestClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APIRequestClient.swift; sourceTree = "<group>"; };
 		3A6D38AA243C986700D15B8B /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		3AC1A1F5251CB83B00E370B5 /* Utility.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = Utility.gif; sourceTree = "<group>"; };
 		44DE6A32391640AFC5A3CB55 /* Pods_UserUtility.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_UserUtility.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6E197021077213C7B116A3C3 /* Pods-UserUtility.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UserUtility.debug.xcconfig"; path = "Target Support Files/Pods-UserUtility/Pods-UserUtility.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -70,6 +72,7 @@
 		3A2A05A9251B833F00CD2474 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				3AC1A1F5251CB83B00E370B5 /* Utility.gif */,
 				3A2A05AA251B835500CD2474 /* test.mp4 */,
 			);
 			path = Resource;
@@ -207,6 +210,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3AC1A1F6251CB83B00E370B5 /* Utility.gif in Resources */,
 				3A6D3897243C83D500D15B8B /* LaunchScreen.storyboard in Resources */,
 				3A6D3894243C83D500D15B8B /* Assets.xcassets in Resources */,
 				3A6D3892243C83D300D15B8B /* Main.storyboard in Resources */,

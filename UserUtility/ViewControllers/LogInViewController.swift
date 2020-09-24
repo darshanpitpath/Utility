@@ -7,32 +7,36 @@
 //
 
 import UIKit
+import MaterialTextField
 
 class LogInViewController: UIViewController {
 
     @IBOutlet var buttonLogIn:UIButton!
     @IBOutlet var buttonHideKeyboard:UIButton!
-    @IBOutlet var txtUserName:UITextField!
-    @IBOutlet var txtPassword:UITextField!
+    @IBOutlet var txtUserName:MFTextField!
+    @IBOutlet var txtPassword:MFTextField!
     
     var objButton:UIButton?
     var isPasswordShow:Bool = false
     var userLogInParameters:[String:Any] = [:]
+    
+    let kUserName = "darshanp@itpathsolutions.in"
+    let kPassword = "test12345"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         //setup login view
         self.setup()
-        
-        
-        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.hideKeyBoard()
+        
         //configure login selector
         self.configureLogInSelector()
+        
+        
     }
     // MARK: - SetUp Methods
     func setup(){
@@ -48,6 +52,21 @@ class LogInViewController: UIViewController {
         self.txtPassword.placeholder = "Password"
         self.txtUserName.delegate = self
         self.txtPassword.delegate = self
+        
+        //Fill Default login data for simulator
+        if UIDevice.isSimulator{
+            self.txtUserName.text = kUserName
+            self.txtPassword.text = kPassword
+            self.userLogInParameters["email"]  = "\(kUserName)"
+            self.userLogInParameters["password"] = "\(kPassword)" 
+        }else{
+            self.txtUserName.text = ""
+            self.txtPassword.text = ""
+        }
+        
+        
+        self.txtUserName.setUpWithPlaceHolder(strPlaceHolder: "UserName", isWhiteBackground: UITraitCollection.current.userInterfaceStyle != .dark, errorColor: .red)
+        self.txtPassword.setUpWithPlaceHolder(strPlaceHolder: "Password", isWhiteBackground: UITraitCollection.current.userInterfaceStyle != .dark, errorColor: .red)
         
         self.configurePasswordTextField()
     }
@@ -74,27 +93,46 @@ class LogInViewController: UIViewController {
     func isValidLogIn()->Bool{
         guard "\(self.userLogInParameters["email"] ?? "")".count > 0 else {
                    DispatchQueue.main.async {
-                        ShowToast.show(toatMessage: "Please enter valid email address.")
+                       self.txtUserName.invalideFieldWithError(strError: "Please enter valid email address.")
+                        //ShowToast.show(toatMessage: "Please enter valid email address.")
                    }
                    return false
                }
                if let emailText:String = self.userLogInParameters["email"] as? String,!emailText.isValidEmail(){
                    DispatchQueue.main.async {
-                        ShowToast.show(toatMessage: "Please enter valid email address.")
+                        self.txtUserName.invalideFieldWithError(strError: "Please enter valid email address.")
+                       // ShowToast.show(toatMessage: "Please enter valid email address.")
                    }
                    return false
                }
                
                guard "\(self.userLogInParameters["password"] ?? "")".count > 0 else {
                    DispatchQueue.main.async {
-                        ShowToast.show(toatMessage: "Please enter valid password.")
+                        self.txtPassword.invalideFieldWithError(strError: "Please enter valid password.")
+                        //ShowToast.show(toatMessage: "Please enter valid password.")
                    }
                    return false
                }
+                
+        guard "\(self.userLogInParameters["password"] ?? "")".count > 6 else {
+            DispatchQueue.main.async {
+                self.txtPassword.invalideFieldWithError(strError:"Please enter password at least 6 digit")
+            }
+            return false
+        }
+        
+                
+        
+        
+        
+        self.txtUserName.validateField()
+        self.txtPassword.validateField()
         return true
     }
     // MARK: - Selector Methods
     @IBAction func buttonLogInSelector(sender:UIButton){
+        //Show Error on login email
+        
         self.userLogInAPIRequest()
     }
     @IBAction func hideKeyBoard(){
@@ -128,22 +166,50 @@ class LogInViewController: UIViewController {
     // MARK: - API Request Methods
     func userLogInAPIRequest(){
         if self.isValidLogIn(){
-              APIRequestClient.shared.sendRequest(requestType: .POST, queryString: kUserLogin, parameter: self.userLogInParameters as [String : AnyObject], isHudeShow: true, success: { (responseSuccess) in
-                            if let objSuccess = responseSuccess as? [String:Any],let _ :String = objSuccess["message"] as? String,let successData = objSuccess["data"] as? [String:Any]{
-                                let currentUser = User.init(userDetail: successData)
-                                currentUser.setuserDetailToUserDefault()
-                               
+            
+            self.userLogInParameters["device_type"] = "ios"
+            self.userLogInParameters["device_id"] = "\(UIDevice.current.identifierForVendor!.uuidString)"
+            if let deviceToken = UserDefaults.standard.object(forKey: "currentDeviceToken") as? String{
+                self.userLogInParameters["device_token"] = deviceToken
+            }else{
+                self.userLogInParameters["device_token"] = "iOS"
+            }
+            
+            
+            
+            
+            
+            APIRequestClient.shared.fetch(queryString: kParentLogin, requestType: .POST, isHudeShow: true, parameter: self.userLogInParameters as [String:AnyObject]) { ( result ) in
+                switch result {
+                    case .success(let response):
+                        
+                        if let objResponse = response as? [String:Any],let objParentData = objResponse["data"] as? [String:Any]{
+                            do {
+                                let parentData = try JSONSerialization.data(withJSONObject: objParentData, options: .prettyPrinted)
+                                let userParent = try? JSONDecoder().decode(ParentUser.self, from: parentData)
+                             
+                            }catch {
+                                print("\(error.localizedDescription)")
                             }
-                        }) { (responseFail) in
-                            DispatchQueue.main.async {
-                                ShowHud.hide()
-                            }
-                            if let objFail = responseFail as? [String:Any],let message:String = objFail["message"] as? String{
-                                DispatchQueue.main.async {
-                                    ShowToast.show(toatMessage: message)
-                                }
-                            }
+                            print(objParentData)
                         }
+                        /*
+                        do {
+                            let jsondata = try JSONSerialization.data(withJSONObject:childJSON, options:.prettyPrinted)
+                            
+                            if let parentUserData = try? JSONDecoder().decode(ParentUser.self, from: jsondata){
+                                print(parentUserData)
+                            }
+                        }catch{
+                            
+                        }*/
+                        print("\(response)")
+                    case .failure(let error):
+                        print(error.localizedDescription)
+                }
+            }
+            
+     
         }
     }
     
@@ -197,5 +263,38 @@ extension LogInViewController:UITextFieldDelegate{
             self.userLogInAPIRequest()
         }
         return true
+    }
+}
+extension MFTextField{
+    func setUpWithPlaceHolder(strPlaceHolder:String,isWhiteBackground:Bool = true,errorColor:UIColor = UIColor.red){
+        
+        
+        
+        if !isWhiteBackground{
+            self.tintColor = UIColor.white
+            self.textColor = UIColor.white
+            self.placeholderColor = UIColor.white
+            self.defaultPlaceholderColor = UIColor.white
+        }else{
+            self.tintColor = UIColor.black
+            self.textColor = UIColor.black
+            self.placeholderColor = UIColor.darkGray
+            self.defaultPlaceholderColor = UIColor.darkGray
+        }
+        
+        let myAttribute = [ NSAttributedString.Key.font: UIFont(name: "Verdana", size: 18.0)! ]
+        self.attributedPlaceholder = NSAttributedString(string: strPlaceHolder, attributes: myAttribute)
+        self.font = UIFont(name: "Verdana", size: 18.0)!
+    }
+    
+    func invalideFieldWithError(strError:String){
+        let obj = NSError.init(domain: "OverRide", code: 100, userInfo: [NSLocalizedDescriptionKey:strError])
+        DispatchQueue.main.async {
+            self.setError(obj, animated: true)
+            self.setError(obj, animated: true)
+        }
+    }
+    func validateField(){
+        self.setError(nil, animated: true)
     }
 }

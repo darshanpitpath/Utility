@@ -291,9 +291,11 @@ extension SignUpViewController:UIImagePickerControllerDelegate,UINavigationContr
             return
         }
         guard let editedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
+            
             dismiss(animated: false, completion: nil)
             return
         }
+        print(editedImage)
         picker.dismiss(animated: true, completion: nil)
         self.userProfileImage = originalImage
         self.buttonUploadImage.setImage(originalImage, for: .normal)

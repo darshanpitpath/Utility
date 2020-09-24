@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import SystemConfiguration
+import SDWebImage
 
 class CommonClass: NSObject {
     //SingleTon
@@ -51,6 +52,16 @@ extension String{
             return true
         }
         return false
+    }
+    var bool: Bool? {
+        switch self.lowercased() {
+        case "true", "t", "yes", "y", "1":
+            return true
+        case "false", "f", "no", "n", "0":
+            return false
+        default:
+            return nil
+        }
     }
     func isValidEmail() -> Bool {
            let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
@@ -162,13 +173,25 @@ class ShowToast: NSObject {
     }
    }
 }
-let kThemeColor = UIColor.init(hexString: "000000")
+let kThemeColor = UIColor.lightGray//UIColor.init(hexString: "000000")
 let kCommonError = "Server Error"
 
 class DeviceType{
     class func isIpad()->Bool
     {
         return UIDevice.current.userInterfaceIdiom == .pad ? true : false
+    }
+}
+extension UIDevice{
+    class var isSimulator:Bool{
+        #if targetEnvironment(simulator)
+           return true
+        #else
+           return false
+        #endif
+    }
+    class var isiPad:Bool{
+        return UIDevice.current.userInterfaceIdiom == .pad
     }
 }
 extension UIApplication{
@@ -179,21 +202,119 @@ extension UIApplication{
 }
 extension UIColor {
     convenience init(hexString: String) {
-        let hex = hexString.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
-        var int = UInt32()
-        Scanner(string: hex).scanHexInt32(&int)
-        let a, r, g, b: UInt32
-        switch hex.count {
-        case 3: // RGB (12-bit)
-            (a, r, g, b) = (255, (int >> 8) * 17, (int >> 4 & 0xF) * 17, (int & 0xF) * 17)
-        case 6: // RGB (24-bit)
-            (a, r, g, b) = (255, int >> 16, int >> 8 & 0xFF, int & 0xFF)
-        case 8: // ARGB (32-bit)
-            (a, r, g, b) = (int >> 24, int >> 16 & 0xFF, int >> 8 & 0xFF, int & 0xFF)
-        default:
-            (a, r, g, b) = (255, 0, 0, 0)
+        
+        var cString = hexString.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        
+        if (cString.hasPrefix("#")) {
+            cString.remove(at: cString.startIndex)
         }
-        self.init(red: CGFloat(r) / 255, green: CGFloat(g) / 255, blue: CGFloat(b) / 255, alpha: CGFloat(a) / 255)
+        var rgbValue:UInt64 = 0
+        Scanner(string: cString).scanHexInt64(&rgbValue)
+
+        self.init(red: CGFloat((rgbValue & 0xFF0000) >> 16) / 255.0, green: CGFloat((rgbValue & 0x00FF00) >> 8) / 255.0, blue: CGFloat(rgbValue & 0x0000FF) / 255.0, alpha: CGFloat(1.0))
+    }
+}
+@IBDesignable
+class ProgressHud: UIView {
+    fileprivate static let rootView = {
+        return UIApplication.shared.keyWindow!
+    }()
+    
+    fileprivate static let blurView:UIView = {
+        let view = UIView(frame: UIScreen.main.bounds)
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = UIColor.clear
+        view.alpha = 0.2
+        return view
+    }()
+    fileprivate static let hudView:UIView = {
+         let view = UIView()
+         view.translatesAutoresizingMaskIntoConstraints = false
+         view.backgroundColor = UIColor.clear
+         view.layer.cornerRadius = 6.0
+         view.clipsToBounds = true
+         view.layoutIfNeeded()
+         return view
+    }()
+    fileprivate static let gifImageView:UIImageView = {
+        let imageData = try? Data(contentsOf: Bundle.main.url(forResource: "Utility", withExtension: "gif")!)
+        
+        if let  advTimeGif = UIImage.sd_image(with: imageData!){
+        //if let advTimeGif = UIImage.sd_animatedGIF(with: imageData!){
+            let objImage = UIImageView()
+            objImage.image = advTimeGif
+            objImage.contentMode = .scaleAspectFit
+            objImage.translatesAutoresizingMaskIntoConstraints = false
+            return objImage
+        }
+        return UIImageView()
+        
+    }()
+    fileprivate static let activity:UIActivityIndicatorView = {
+        let view = UIActivityIndicatorView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.startAnimating()
+        view.style = .whiteLarge
+        view.hidesWhenStopped = false
+        view.color = UIColor.black
+        
+       return view
+    }()
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    static func show(){
+        rootView.addSubview(blurView)
+        self.addObserver()
+        self.addActivity()
+    }
+    static func addObserver(){
+        NotificationCenter.default.addObserver(self, selector: #selector(rotated), name:UIDevice.orientationDidChangeNotification, object: nil)
+    }
+    @objc static func rotated(){
+        print(UIScreen.main.bounds)
+        switch UIDevice.current.orientation {
+        case .landscapeLeft, .landscapeRight:
+            print("landscape")
+        default:
+            print("Portrait")
+        }
+        blurView.frame = UIScreen.main.bounds
+        //blurView.frame = CGRect.init(origin: .zero, size: CGSize.init(width: UIScreen.main.bounds.height, height: UIScreen.main.bounds.width))
+        
+    }
+    static func addActivity(){
+        rootView.addSubview(hudView)
+        hudView.widthAnchor.constraint(equalToConstant: 125).isActive = true
+        hudView.heightAnchor.constraint(equalToConstant: 125).isActive = true
+        hudView.centerXAnchor.constraint(equalTo: hudView.superview!.centerXAnchor).isActive = true
+        hudView.centerYAnchor.constraint(equalTo: hudView.superview!.centerYAnchor).isActive = true
+        
+//        hudView.addSubview(activity)
+//        activity.centerXAnchor.constraint(equalTo: activity.superview!.centerXAnchor).isActive = true
+//        activity.centerYAnchor.constraint(equalTo: activity.superview!.centerYAnchor).isActive = true
+        rootView.isUserInteractionEnabled = false
+        
+        hudView.addSubview(gifImageView)
+        gifImageView.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        gifImageView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        gifImageView.centerXAnchor.constraint(equalTo: gifImageView.superview!.centerXAnchor).isActive = true
+        gifImageView.centerYAnchor.constraint(equalTo: gifImageView.superview!.centerYAnchor).isActive = true
+        
+        
+    }
+    static func hide(){
+        
+        DispatchQueue.main.async {
+            NotificationCenter.default.removeObserver(self)
+            rootView.isUserInteractionEnabled = true
+            blurView.removeFromSuperview()
+            hudView.removeFromSuperview()
+        }
+    
+    }
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 class ShowHud:NSObject{
@@ -215,7 +336,7 @@ class ShowHud:NSObject{
     static var loadingIndicator:UIActivityIndicatorView={
         let loading = UIActivityIndicatorView()
         loading.translatesAutoresizingMaskIntoConstraints = false
-        loading.style = .whiteLarge
+        loading.style = .large
         loading.backgroundColor = .clear
         loading.color = .black
         loading.layer.cornerRadius = 16
@@ -256,7 +377,7 @@ class ShowHud:NSObject{
     }
     
     @objc class func hideAfterOneSecond(){
-        UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//        UIApplication.shared.isNetworkActivityIndicatorVisible = false
         ShowHud.loadingIndicator.stopAnimating()
         ShowHud.disablerView.removeFromSuperview()
         timerToHideHud?.invalidate()
@@ -267,7 +388,7 @@ class ShowHud:NSObject{
             if !ShowHud.loadingIndicator.isAnimating
             {
                 //  loadingMsgLabel.text = loadingMessage
-                UIApplication.shared.isNetworkActivityIndicatorVisible = true
+//                UIApplication.shared.isNetworkActivityIndicatorVisible = true
                 
                 keyWindow.addSubview(disablerView)
                 disablerView.rightAnchor.constraint(equalTo: keyWindow.rightAnchor).isActive = true

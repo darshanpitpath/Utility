@@ -1,16 +1,26 @@
 PODS:
   - IQKeyboardManagerSwift (6.5.4)
+  - MaterialTextField (1.0.1)
+  - SDWebImage (5.9.0):
+    - SDWebImage/Core (= 5.9.0)
+  - SDWebImage/Core (5.9.0)
 
 DEPENDENCIES:
   - IQKeyboardManagerSwift
+  - MaterialTextField
+  - SDWebImage
 
 SPEC REPOS:
   trunk:
     - IQKeyboardManagerSwift
+    - MaterialTextField
+    - SDWebImage
 
 SPEC CHECKSUMS:
   IQKeyboardManagerSwift: 2dde0fc70110e8eac7ccce2a46fdbec6a850b414
+  MaterialTextField: f1a0786588e4d3610cb9bb62d2adbe9777cebbf9
+  SDWebImage: 62ae4a18473520c67b79e9724c31a63599cc9423
 
-PODFILE CHECKSUM: 491dada5da356c28b08103a68937ba367ba17177
+PODFILE CHECKSUM: 3c5cddb2b036aaaa21a56e8f54ccc99c41a2e84f
 
 COCOAPODS: 1.8.4

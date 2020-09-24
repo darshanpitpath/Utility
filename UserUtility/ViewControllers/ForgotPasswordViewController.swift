@@ -92,8 +92,7 @@ class ForgotPasswordViewController: UIViewController {
         if self.isValidForgotPassword(){
             APIRequestClient.shared.sendRequest(requestType: .POST, queryString: kUserForgot, parameter: self.userForgotParameters as [String : AnyObject], isHudeShow: true, success: { (responseSuccess) in
                 if let objSuccess = responseSuccess as? [String:Any],let _ :String = objSuccess["message"] as? String,let successData = objSuccess["data"] as? [String:Any]{
-                   
-                   
+                   print(successData)
                 }
             }) { (responseFail) in
                 DispatchQueue.main.async {
