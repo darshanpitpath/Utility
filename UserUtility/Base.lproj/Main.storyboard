@@ -63,16 +63,16 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="774"/>
                                             </button>
                                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="C2x-uB-wsy">
-                                                <rect key="frame" x="10" y="340.5" width="394" height="93"/>
+                                                <rect key="frame" x="10" y="356" width="394" height="62"/>
                                                 <subviews>
                                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" placeholder="User Name" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="glz-eH-bi2" customClass="MFTextField">
-                                                        <rect key="frame" x="0.0" y="0.0" width="394" height="36.5"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="394" height="21"/>
                                                         <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="17"/>
                                                         <textInputTraits key="textInputTraits" textContentType="email"/>
                                                     </textField>
                                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="ocv-IU-jGL" customClass="MFTextField">
-                                                        <rect key="frame" x="0.0" y="56.5" width="394" height="36.5"/>
+                                                        <rect key="frame" x="0.0" y="41" width="394" height="21"/>
                                                         <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                         <fontDescription key="fontDescription" name="Verdana" family="Verdana" pointSize="17"/>
                                                         <textInputTraits key="textInputTraits"/>
@@ -83,14 +83,14 @@
                                                 </constraints>
                                             </stackView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="aLk-8Q-YdX">
-                                                <rect key="frame" x="10" y="478.5" width="394" height="50"/>
+                                                <rect key="frame" x="10" y="463" width="394" height="50"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="50" id="NN1-TN-Vbe"/>
                                                 </constraints>
                                                 <state key="normal" title="Log In"/>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="P2C-Mk-sCe">
-                                                <rect key="frame" x="289" y="441.5" width="115" height="29"/>
+                                                <rect key="frame" x="289" y="426" width="115" height="29"/>
                                                 <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
                                                 <state key="normal" title="Forgot Password?">
                                                     <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -100,7 +100,7 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7ch-Hx-i42">
-                                                <rect key="frame" x="119" y="536.5" width="176" height="29"/>
+                                                <rect key="frame" x="119" y="521" width="176" height="29"/>
                                                 <fontDescription key="fontDescription" name="Poppins-Regular" family="Poppins" pointSize="14"/>
                                                 <state key="normal" title="New Member? Sign up here">
                                                     <color key="titleColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -666,6 +666,21 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6Bo-6K-CqS" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2310" y="139"/>
+        </scene>
+        <!--Home View Controller-->
+        <scene sceneID="oVg-Qc-ugO">
+            <objects>
+                <viewController storyboardIdentifier="HomeViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="ceA-8C-ZTV" customClass="HomeViewController" customModule="UserUtility" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="cLS-pR-Cck">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="8Zv-c1-XmT"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="V3v-Mm-Bkg" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2309" y="817"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="qeZ-fO-hnR">

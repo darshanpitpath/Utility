@@ -26,8 +26,7 @@ class LogInViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //setup login view
-        self.setup()
+     
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -36,7 +35,8 @@ class LogInViewController: UIViewController {
         //configure login selector
         self.configureLogInSelector()
         
-        
+        //setup login view
+        self.setup()
     }
     // MARK: - SetUp Methods
     func setup(){
@@ -54,7 +54,11 @@ class LogInViewController: UIViewController {
         self.txtPassword.delegate = self
         
         //Fill Default login data for simulator
-        if UIDevice.isSimulator{
+        guard let currentDeviceUUID = UIDevice.current.identifierForVendor else {
+                   return
+               }
+        print(currentDeviceUUID)
+        if UIDevice.isSimulator || "\(currentDeviceUUID)" == "40E21EB2-434B-4775-8EA4-BF9FAC1198DC"{ //unique for IPS iPhone X only for this application
             self.txtUserName.text = kUserName
             self.txtPassword.text = kPassword
             self.userLogInParameters["email"]  = "\(kUserName)"
@@ -174,11 +178,6 @@ class LogInViewController: UIViewController {
             }else{
                 self.userLogInParameters["device_token"] = "iOS"
             }
-            
-            
-            
-            
-            
             APIRequestClient.shared.fetch(queryString: kParentLogin, requestType: .POST, isHudeShow: true, parameter: self.userLogInParameters as [String:AnyObject]) { ( result ) in
                 switch result {
                     case .success(let response):
@@ -186,8 +185,16 @@ class LogInViewController: UIViewController {
                         if let objResponse = response as? [String:Any],let objParentData = objResponse["data"] as? [String:Any]{
                             do {
                                 let parentData = try JSONSerialization.data(withJSONObject: objParentData, options: .prettyPrinted)
-                                let userParent = try? JSONDecoder().decode(ParentUser.self, from: parentData)
-                             
+                                if let userParent:ParentUser = try? JSONDecoder().decode(ParentUser.self, from: parentData){
+                                    userParent.setuserDetailToUserDefault()
+                                }
+                                //For testing get current userParent from userdefault and display details
+                                if let currentParent = ParentUser.getUserFromUserDefault(){
+                                    //Push to Login screen
+                                    self.navigateToLoginScreen()
+                                    
+                                }
+                                
                             }catch {
                                 print("\(error.localizedDescription)")
                             }
@@ -231,6 +238,12 @@ class LogInViewController: UIViewController {
                self.navigationController?.pushViewController(signUpScreen, animated: true)
            }
        }
+    //navigate to login screen
+    func navigateToLoginScreen(){
+        if let loginScreen = self.storyboard?.instantiateViewController(identifier: "LogInViewController") as? LogInViewController{
+            self.navigationController?.pushViewController(loginScreen, animated: true)
+        }
+    }
 
 }
 extension LogInViewController:UITextFieldDelegate{

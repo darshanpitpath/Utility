@@ -31,6 +31,8 @@ class SplashVideoViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        self.lblUtility.isHidden = !UIDevice.isSimulator
+        
         if UIDevice.isSimulator{ // app run on simulator
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
                 self.pushtoLoginViewController()

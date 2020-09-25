@@ -7,22 +7,6 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "F682DBA9-A9E9-47FC-A340-503F52AC340E"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "UserUtility/ViewControllers/VideoOnAppLaunch/SplashVideoViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "117"
-            endingLineNumber = "117"
-            landmarkName = "itemDidFinishPlaying(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             uuid = "3DFC31F9-D513-449F-8A26-668670EFC18B"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
@@ -48,7 +32,7 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "76"
                   endingLineNumber = "76"
-                  offsetFromSymbolStart = "210">
+                  offsetFromSymbolStart = "204">
                </Location>
                <Location
                   uuid = "3DFC31F9-D513-449F-8A26-668670EFC18B - bda079ae59a87ea5"
@@ -63,7 +47,7 @@
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "77"
                   endingLineNumber = "77"
-                  offsetFromSymbolStart = "347">
+                  offsetFromSymbolStart = "304">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -71,32 +55,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "379F8203-C170-4335-85FD-57A5EDD9C782"
-            shouldBeEnabled = "Yes"
+            uuid = "59214743-2AFE-45C3-B766-039EAF853143"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "UserUtility/ViewControllers/LogInViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "194"
-            endingLineNumber = "194"
-            landmarkName = "userLogInAPIRequest()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            uuid = "C0DEFDA0-DC3D-4F2D-A079-24CDBE0A1199"
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "UserUtility/ViewControllers/LogInViewController.swift"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "190"
-            endingLineNumber = "190"
-            landmarkName = "userLogInAPIRequest()"
+            startingLineNumber = "288"
+            endingLineNumber = "288"
+            landmarkName = "setUpWithPlaceHolder(strPlaceHolder:isWhiteBackground:errorColor:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

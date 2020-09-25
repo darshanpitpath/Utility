@@ -11,11 +11,11 @@ import UIKit
 
 let kUserDefault = UserDefaults.standard
 let kUserDetail = "UserDetail"
+let kParentUserDetail = "ParentUser"
 
 struct ParentUser :Codable {
-   var accessToken,countrycode,email,image,name,phone:String
+    var accessToken,countrycode,email,image,name,phone:String
     var id:Int
-    
     enum CodingKeys:String, CodingKey {
         case id
         case accessToken = "access_token"
@@ -25,21 +25,11 @@ struct ParentUser :Codable {
         case name
         case phone
     }
-    init(from decoder:Decoder) throws{
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try values.decodeIfPresent(Int.self, forKey: .id) ?? 0
-        self.accessToken = try values.decodeIfPresent(String.self, forKey: .accessToken) ?? ""
-        self.countrycode = try values.decodeIfPresent(String.self, forKey: .countrycode) ?? ""
-        self.email = try values.decodeIfPresent(String.self, forKey: .email) ?? ""
-        self.image = try values.decodeIfPresent(String.self, forKey: .image) ?? ""
-        self.name = try values.decodeIfPresent(String.self, forKey: .name) ?? ""
-        self.phone = try values.decodeIfPresent(String.self, forKey: .phone) ?? ""
-    }
 }
 extension ParentUser{
     
     static var isUserLoggedIn:Bool{
-        if let userDetail  = kUserDefault.value(forKey: kUserDetail) as? Data{
+        if let userDetail  = kUserDefault.value(forKey: kParentUserDetail) as? Data{
             return self.isValiduserDetail(data: userDetail)
         }else{
           return false
@@ -48,7 +38,7 @@ extension ParentUser{
     func setuserDetailToUserDefault(){
         do{
             let userDetail = try JSONEncoder().encode(self)
-            kUserDefault.setValue(userDetail, forKey:kUserDetail)
+            kUserDefault.setValue(userDetail, forKey:kParentUserDetail)
             kUserDefault.synchronize()
         }catch{
             DispatchQueue.main.async {
@@ -64,10 +54,10 @@ extension ParentUser{
             return false
         }
     }
-    static func getUserFromUserDefault() -> User?{
-        if let userDetail = kUserDefault.value(forKey: kUserDetail) as? Data{
+    static func getUserFromUserDefault() -> ParentUser?{
+        if let userDetail = kUserDefault.value(forKey: kParentUserDetail) as? Data{
             do {
-                let user:User = try JSONDecoder().decode(User.self, from: userDetail)
+                let user:ParentUser = try JSONDecoder().decode(ParentUser.self, from: userDetail)
                 return user
             }catch{
                 DispatchQueue.main.async {
@@ -82,7 +72,7 @@ extension ParentUser{
         return nil
     }
     static func removeUserFromUserDefault(){
-        kUserDefault.removeObject(forKey:kUserDetail)
+        kUserDefault.removeObject(forKey:kParentUserDetail)
     }
     
 }

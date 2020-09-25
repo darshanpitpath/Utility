@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A04EFE1251E290F00514C64 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A04EFE0251E290F00514C64 /* HomeViewController.swift */; };
 		3A2A05AB251B835500CD2474 /* test.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 3A2A05AA251B835500CD2474 /* test.mp4 */; };
 		3A2A05AE251B842C00CD2474 /* SplashVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2A05AD251B842C00CD2474 /* SplashVideoViewController.swift */; };
 		3A6D388B243C83D300D15B8B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A6D388A243C83D300D15B8B /* AppDelegate.swift */; };
@@ -27,6 +28,7 @@
 
 /* Begin PBXFileReference section */
 		2A16630488098D9AB8C11CDC /* Pods-UserUtility.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-UserUtility.release.xcconfig"; path = "Target Support Files/Pods-UserUtility/Pods-UserUtility.release.xcconfig"; sourceTree = "<group>"; };
+		3A04EFE0251E290F00514C64 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		3A2A05AA251B835500CD2474 /* test.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.mp4; sourceTree = "<group>"; };
 		3A2A05AD251B842C00CD2474 /* SplashVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashVideoViewController.swift; sourceTree = "<group>"; };
 		3A6D3887243C83D300D15B8B /* UserUtility.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UserUtility.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -67,6 +69,14 @@
 				2A16630488098D9AB8C11CDC /* Pods-UserUtility.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		3A04EFDF251E28FD00514C64 /* HomeView */ = {
+			isa = PBXGroup;
+			children = (
+				3A04EFE0251E290F00514C64 /* HomeViewController.swift */,
+			);
+			path = HomeView;
 			sourceTree = "<group>";
 		};
 		3A2A05A9251B833F00CD2474 /* Resource */ = {
@@ -126,6 +136,7 @@
 			children = (
 				3A2A05AC251B841000CD2474 /* VideoOnAppLaunch */,
 				3A6D389F243C859100D15B8B /* LogInViewController.swift */,
+				3A04EFDF251E28FD00514C64 /* HomeView */,
 				3A6D38A1243C85B600D15B8B /* SignUpViewController.swift */,
 				3A6D38A3243C85D800D15B8B /* ForgotPasswordViewController.swift */,
 			);
@@ -274,6 +285,7 @@
 				3A6D388B243C83D300D15B8B /* AppDelegate.swift in Sources */,
 				3A6D38AB243C986700D15B8B /* User.swift in Sources */,
 				3A6D38A7243C950C00D15B8B /* Utilityclass.swift in Sources */,
+				3A04EFE1251E290F00514C64 /* HomeViewController.swift in Sources */,
 				3A6D388D243C83D300D15B8B /* SceneDelegate.swift in Sources */,
 				3A6D38A2243C85B600D15B8B /* SignUpViewController.swift in Sources */,
 				3A2A05AE251B842C00CD2474 /* SplashVideoViewController.swift in Sources */,
