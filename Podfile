@@ -7,6 +7,8 @@ target 'UserUtility' do
   pod 'IQKeyboardManagerSwift'
   pod 'MaterialTextField'
   pod 'SDWebImage'
+  pod 'Alamofire'
   # Pods for UserUtility
 
 end
+

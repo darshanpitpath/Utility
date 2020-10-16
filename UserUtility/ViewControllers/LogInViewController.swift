@@ -35,9 +35,17 @@ class LogInViewController: UIViewController {
         //configure login selector
         self.configureLogInSelector()
         
-        //setup login view
+       //setup login view
         self.setup()
+
+        self.navigationController?.navigationBar.isHidden = false
+        self.title = "Log In"
+        self.navigationItem.hidesBackButton = true
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+
+        
     }
+   
     // MARK: - SetUp Methods
     func setup(){
         self.buttonHideKeyboard.addTarget(self, action: #selector(hideKeyBoard), for: .touchUpInside)
@@ -301,7 +309,7 @@ extension MFTextField{
     }
     
     func invalideFieldWithError(strError:String){
-        let obj = NSError.init(domain: "OverRide", code: 100, userInfo: [NSLocalizedDescriptionKey:strError])
+        let obj = NSError.init(domain: "UserUtlility", code: 100, userInfo: [NSLocalizedDescriptionKey:strError])
         DispatchQueue.main.async {
             self.setError(obj, animated: true)
             self.setError(obj, animated: true)
@@ -309,5 +317,25 @@ extension MFTextField{
     }
     func validateField(){
         self.setError(nil, animated: true)
+    }
+}
+extension UIView{
+    func invalideField(){
+          let animation = CABasicAnimation(keyPath: "position")
+          animation.duration = 0.05
+          animation.repeatCount = 5
+          animation.autoreverses = true
+          animation.fromValue = NSValue(cgPoint: CGPoint(x: self.center.x - 4, y: self.center.y))
+          animation.toValue = NSValue(cgPoint: CGPoint(x: self.center.x + 4, y: self.center.y))
+          self.layer.add(animation, forKey: "position")
+          //self.setBorder(color: .red)
+      }
+    func validField(){
+        self.setBorder(color: .clear)
+    }
+    func setBorder(width:CGFloat = 0.4,color:UIColor){
+        self.layer.masksToBounds = false
+        self.layer.borderWidth = width
+        self.layer.borderColor = color.cgColor
     }
 }

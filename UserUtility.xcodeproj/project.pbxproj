@@ -10,6 +10,14 @@
 		3A04EFE1251E290F00514C64 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A04EFE0251E290F00514C64 /* HomeViewController.swift */; };
 		3A2A05AB251B835500CD2474 /* test.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 3A2A05AA251B835500CD2474 /* test.mp4 */; };
 		3A2A05AE251B842C00CD2474 /* SplashVideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A2A05AD251B842C00CD2474 /* SplashVideoViewController.swift */; };
+		3A41A29C2534358B0094B69B /* WebURLLoaderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A41A29B2534358B0094B69B /* WebURLLoaderViewController.swift */; };
+		3A614DAD2536DEFF008FD3E9 /* CountryCodePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A614DAC2536DEFF008FD3E9 /* CountryCodePickerViewController.swift */; };
+		3A614DAF2536E351008FD3E9 /* CornorButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A614DAE2536E351008FD3E9 /* CornorButton.swift */; };
+		3A614DB325370507008FD3E9 /* Country.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A614DB225370507008FD3E9 /* Country.swift */; };
+		3A614DBA25371288008FD3E9 /* CountryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A614DB825371288008FD3E9 /* CountryTableViewCell.swift */; };
+		3A614DBB25371288008FD3E9 /* CountryTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A614DB925371288008FD3E9 /* CountryTableViewCell.xib */; };
+		3A614DBE253739AD008FD3E9 /* country.json in Resources */ = {isa = PBXBuildFile; fileRef = 3A614DBC253739AD008FD3E9 /* country.json */; };
+		3A614DBF253739AD008FD3E9 /* FlagKit.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3A614DBD253739AD008FD3E9 /* FlagKit.xcassets */; };
 		3A6D388B243C83D300D15B8B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A6D388A243C83D300D15B8B /* AppDelegate.swift */; };
 		3A6D388D243C83D300D15B8B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A6D388C243C83D300D15B8B /* SceneDelegate.swift */; };
 		3A6D388F243C83D300D15B8B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A6D388E243C83D300D15B8B /* ViewController.swift */; };
@@ -31,6 +39,14 @@
 		3A04EFE0251E290F00514C64 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		3A2A05AA251B835500CD2474 /* test.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.mp4; sourceTree = "<group>"; };
 		3A2A05AD251B842C00CD2474 /* SplashVideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashVideoViewController.swift; sourceTree = "<group>"; };
+		3A41A29B2534358B0094B69B /* WebURLLoaderViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebURLLoaderViewController.swift; sourceTree = "<group>"; };
+		3A614DAC2536DEFF008FD3E9 /* CountryCodePickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryCodePickerViewController.swift; sourceTree = "<group>"; };
+		3A614DAE2536E351008FD3E9 /* CornorButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CornorButton.swift; sourceTree = "<group>"; };
+		3A614DB225370507008FD3E9 /* Country.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Country.swift; sourceTree = "<group>"; };
+		3A614DB825371288008FD3E9 /* CountryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryTableViewCell.swift; sourceTree = "<group>"; };
+		3A614DB925371288008FD3E9 /* CountryTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CountryTableViewCell.xib; sourceTree = "<group>"; };
+		3A614DBC253739AD008FD3E9 /* country.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = country.json; sourceTree = "<group>"; };
+		3A614DBD253739AD008FD3E9 /* FlagKit.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = FlagKit.xcassets; sourceTree = "<group>"; };
 		3A6D3887243C83D300D15B8B /* UserUtility.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = UserUtility.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A6D388A243C83D300D15B8B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		3A6D388C243C83D300D15B8B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -82,6 +98,8 @@
 		3A2A05A9251B833F00CD2474 /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				3A614DBC253739AD008FD3E9 /* country.json */,
+				3A614DBD253739AD008FD3E9 /* FlagKit.xcassets */,
 				3AC1A1F5251CB83B00E370B5 /* Utility.gif */,
 				3A2A05AA251B835500CD2474 /* test.mp4 */,
 			);
@@ -138,6 +156,8 @@
 				3A6D389F243C859100D15B8B /* LogInViewController.swift */,
 				3A04EFDF251E28FD00514C64 /* HomeView */,
 				3A6D38A1243C85B600D15B8B /* SignUpViewController.swift */,
+				3A614DAC2536DEFF008FD3E9 /* CountryCodePickerViewController.swift */,
+				3A41A29B2534358B0094B69B /* WebURLLoaderViewController.swift */,
 				3A6D38A3243C85D800D15B8B /* ForgotPasswordViewController.swift */,
 			);
 			path = ViewControllers;
@@ -147,8 +167,12 @@
 			isa = PBXGroup;
 			children = (
 				3A6D38AA243C986700D15B8B /* User.swift */,
+				3A614DAE2536E351008FD3E9 /* CornorButton.swift */,
 				3A6D38A6243C950C00D15B8B /* Utilityclass.swift */,
 				3A6D38A8243C957100D15B8B /* APIRequestClient.swift */,
+				3A614DB225370507008FD3E9 /* Country.swift */,
+				3A614DB825371288008FD3E9 /* CountryTableViewCell.swift */,
+				3A614DB925371288008FD3E9 /* CountryTableViewCell.xib */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -223,9 +247,12 @@
 			files = (
 				3AC1A1F6251CB83B00E370B5 /* Utility.gif in Resources */,
 				3A6D3897243C83D500D15B8B /* LaunchScreen.storyboard in Resources */,
+				3A614DBB25371288008FD3E9 /* CountryTableViewCell.xib in Resources */,
 				3A6D3894243C83D500D15B8B /* Assets.xcassets in Resources */,
 				3A6D3892243C83D300D15B8B /* Main.storyboard in Resources */,
 				3A2A05AB251B835500CD2474 /* test.mp4 in Resources */,
+				3A614DBF253739AD008FD3E9 /* FlagKit.xcassets in Resources */,
+				3A614DBE253739AD008FD3E9 /* country.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -278,16 +305,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3A41A29C2534358B0094B69B /* WebURLLoaderViewController.swift in Sources */,
 				3A6D38A0243C859100D15B8B /* LogInViewController.swift in Sources */,
+				3A614DAF2536E351008FD3E9 /* CornorButton.swift in Sources */,
 				3A6D388F243C83D300D15B8B /* ViewController.swift in Sources */,
 				3A6D38A4243C85D900D15B8B /* ForgotPasswordViewController.swift in Sources */,
 				3A6D38A9243C957100D15B8B /* APIRequestClient.swift in Sources */,
 				3A6D388B243C83D300D15B8B /* AppDelegate.swift in Sources */,
 				3A6D38AB243C986700D15B8B /* User.swift in Sources */,
 				3A6D38A7243C950C00D15B8B /* Utilityclass.swift in Sources */,
+				3A614DAD2536DEFF008FD3E9 /* CountryCodePickerViewController.swift in Sources */,
 				3A04EFE1251E290F00514C64 /* HomeViewController.swift in Sources */,
 				3A6D388D243C83D300D15B8B /* SceneDelegate.swift in Sources */,
+				3A614DBA25371288008FD3E9 /* CountryTableViewCell.swift in Sources */,
 				3A6D38A2243C85B600D15B8B /* SignUpViewController.swift in Sources */,
+				3A614DB325370507008FD3E9 /* Country.swift in Sources */,
 				3A2A05AE251B842C00CD2474 /* SplashVideoViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

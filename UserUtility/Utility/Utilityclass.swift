@@ -433,3 +433,12 @@ class RoundButton:UIButton{
         
     }
 }
+protocol DarkModeSetUp {
+    func loadViewWithDarkModeSetup()
+}
+extension DarkModeSetUp where Self:UIViewController{
+    func loadViewDarkMode(){
+        self.loadViewWithDarkModeSetup()
+    }
+}
+

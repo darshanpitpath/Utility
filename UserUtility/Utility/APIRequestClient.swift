@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 
 let kNoInternetError = "No Internet Please check network connection"
@@ -15,14 +16,14 @@ let kBaseURL = "http://app.overridesafety.com/api/"
 
 let kUserLogin = "user/login"
 let kUserForgot = "user/forgot"
-
+let kParentForgotPassword = "parent/forgotpassword"
 let kParentLogin = "parent/login"
 
 let kVersion = "v1/"
 
 typealias SUCCESS = (_ response:Any)->()
 typealias FAIL = (_ response:Any)->()
-
+typealias SUCCESSFAILResult = (Result< Any, Error >) -> ()
 class APIRequestClient: NSObject {
     enum RequestType {
         case POST
@@ -35,7 +36,7 @@ class APIRequestClient: NSObject {
     static let shared:APIRequestClient = APIRequestClient()
     
     //Send Request with ResultType<Success, Error>
-    func fetch(queryString:String = "",requestType:RequestType,isHudeShow:Bool,parameter:[String:AnyObject]?,completion:@escaping (Result< Any, Error >) -> () ){
+    func fetch(queryString:String = "",requestType:RequestType,isHudeShow:Bool,parameter:[String:AnyObject]?,completion:@escaping SUCCESSFAILResult){
         //Check internet connection as per your convenience
         guard CommonClass.shared.isConnectedToInternet else{
             ShowToast.show(toatMessage: kNoInternetError)
@@ -88,6 +89,11 @@ class APIRequestClient: NSObject {
             if let objError = error{
                 completion(.failure(objError))
             }
+            if let objResponse = response as? HTTPURLResponse,let _ = data{
+                print("\(objResponse.statusCode)")
+            }else{
+                print("Error")
+            }
             //Validate for blank data and URL response status code
             if let _ = data,let objURLResponse = response as? HTTPURLResponse{
                 //We have data validate for JSON and convert in JSON
@@ -106,9 +112,67 @@ class APIRequestClient: NSObject {
             }
         }.resume()
     }
+    //Upload Image API
+    func uploadImageAPI(requestType:RequestType,queryString:String?,parameters:[String:AnyObject],imageData:Data?,isPdf:Bool = false,isHudShow:Bool,completion:@escaping SUCCESSFAILResult){
+        guard CommonClass.shared.isConnectedToInternet else{
+           ShowToast.show(toatMessage: kNoInternetError)
+           return
+        }
+
+        //Show Hud
+        if isHudShow{
+           DispatchQueue.main.async {
+               ShowHud.show()
+           }
+        }
+        let urlString = kBaseURL + kVersion + (queryString == nil ? "" : queryString!)
+        
+        var headers: HTTPHeaders = ["Content-type": "multipart/form-data"]//,"X-API-KEY":kXAPIKey,"roll_id":"\(rollId)"]
+        if User.isUserLoggedIn,let objUser = User.getUserFromUserDefault(){
+            
+        }
+      
+        
+        AF.upload(multipartFormData: { (multipartFormData) in
+                for (key, value) in parameters {
+                    multipartFormData.append("\(value)".data(using: String.Encoding.utf8)!, withName: key as String)
+                }
+                
+                if let _ = imageData{
+                    if isPdf{
+                        multipartFormData.append(imageData!, withName: "file", fileName: "file.pdf", mimeType: "application/pdf")
+                    }else{
+                        multipartFormData.append(imageData!, withName: "image", fileName: "image.png", mimeType: "image/png")
+                    }
+                    
+                }
+            }, to: "\(urlString)")
+            { (result) in
+                print(result)
+                /*
+                switch result {
+                case .success(let upload, _, _):
+                    
+                    upload.uploadProgress(closure: { (progress) in
+                        //Print progress
+                        print("uploading \(progress)")
+                        
+                    })
+                    
+                    upload.responseJSON { response in
+                        //print response.result
+                        
+                    }
+                case .failure( _): break
+                    //print encodingError.description
+                }*/
+            }
+        
+                 
+        
+    }
     
-    
-    //Post LogIn API
+    //Post API
     func sendRequest(requestType:RequestType,queryString:String?,parameter:[String:AnyObject]?,isHudeShow:Bool,success:@escaping SUCCESS,fail:@escaping FAIL){
         guard CommonClass.shared.isConnectedToInternet else{
             ShowToast.show(toatMessage: kNoInternetError)
@@ -166,5 +230,11 @@ class APIRequestClient: NSObject {
         }
         task.resume()
     }
-
+    //Image Upload with Multipart Data
+    
+    //Multiple Image upload with Multipart Data
+    
+    
+    
+    
 }
