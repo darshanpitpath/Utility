@@ -7,11 +7,14 @@
 //
 
 import UIKit
+import MaterialTextField
 
 class ForgotPasswordViewController: UIViewController {
 
+    let kUserName = "darshanp@itpathsolutions.in"
+    
     @IBOutlet var buttonBack:UIButton!
-    @IBOutlet var txtUserName:UITextField!
+    @IBOutlet var txtUserName:MFTextField!
     @IBOutlet var buttonForgot:UIButton!
     
     var userForgotParameters:[String:Any] = [:]
@@ -20,11 +23,13 @@ class ForgotPasswordViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        //setup methods
-        self.setup()
+      
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        //setup methods
+        self.setup()
+        
         DispatchQueue.main.async {
             self.hideKeyBoard()
         }
@@ -32,33 +37,53 @@ class ForgotPasswordViewController: UIViewController {
         self.configureForgotSelector()
         //back selector
         self.configureBackSelector()
+        //fill defaultDetails
+        self.fillDefaultEmailForForgotPassword()
     }
 
     // MARK: - SetUp Methods
     func setup(){
-        self.txtUserName.placeholder = "UserName"
+        self.txtUserName.setUpWithPlaceHolder(strPlaceHolder: "Username", isWhiteBackground: UITraitCollection.current.userInterfaceStyle != .dark, errorColor: .red)
         let objIMage = UIImage.init(named: "back")?.withRenderingMode(.alwaysTemplate)
         self.buttonBack.setImage(objIMage, for: .normal)
         self.buttonBack.tintColor = UIColor.label
         self.txtUserName.delegate = self
         
+        self.title = "Forgot Password"
     }
     func isValidForgotPassword()->Bool{
         guard "\(self.userForgotParameters["email"] ?? "")".count > 0 else {
                    DispatchQueue.main.async {
-                        ShowToast.show(toatMessage: "Please enter valid email address.")
+                     self.txtUserName.invalideFieldWithError(strError: "Please enter valid email address.")
+                     //ShowToast.show(toatMessage: "Please enter valid email address.")
                    }
                    return false
                }
                if let emailText:String = self.userForgotParameters["email"] as? String,!emailText.isValidEmail(){
                    DispatchQueue.main.async {
-                        ShowToast.show(toatMessage: "Please enter valid email address.")
+                     self.txtUserName.invalideFieldWithError(strError: "Please enter valid email address.")
+                     //ShowToast.show(toatMessage: "Please enter valid email address.")
                    }
                    return false
                }
                
-               
+        self.txtUserName.validateField()
         return true
+    }
+    func fillDefaultEmailForForgotPassword(){
+        //Fill Default login data for simulator
+        guard let currentDeviceUUID = UIDevice.current.identifierForVendor else {
+                   return
+               }
+        print(currentDeviceUUID)
+        if UIDevice.isSimulator || "\(currentDeviceUUID)" == "40E21EB2-434B-4775-8EA4-BF9FAC1198DC"{ //unique for IPS iPhone X only for this application
+            self.txtUserName.text = kUserName
+            self.userForgotParameters["email"]  = "\(kUserName)"
+            
+        }else{
+            self.txtUserName.text = ""
+            
+        }
     }
     func configureBackSelector(){
        let objIMage = UIImage.init(named: "back")?.withRenderingMode(.alwaysTemplate)
@@ -90,10 +115,21 @@ class ForgotPasswordViewController: UIViewController {
     // MARK: - API Request Methods
     func userForgotPasswordAPIRequest(){
         if self.isValidForgotPassword(){
-            APIRequestClient.shared.sendRequest(requestType: .POST, queryString: kUserForgot, parameter: self.userForgotParameters as [String : AnyObject], isHudeShow: true, success: { (responseSuccess) in
+            APIRequestClient.shared.fetch(queryString:kParentForgotPassword,requestType: .POST, isHudeShow: true, parameter: self.userForgotParameters as [String:AnyObject]) { (result) in
+                     switch result{
+                     case .success(let response):
+                         print("\(response)")
+                     case .failure(let error) :
+                         print("\(error.localizedDescription)")
+                         
+                     }
+                 }
+        }
+        /*
+        if self.isValidForgotPassword(){
+            APIRequestClient.shared.sendRequest(requestType: .POST, queryString: kParentForgotPassword, parameter: self.userForgotParameters as [String : AnyObject], isHudeShow: true, success: { (responseSuccess) in
                 if let objSuccess = responseSuccess as? [String:Any],let _ :String = objSuccess["message"] as? String,let successData = objSuccess["data"] as? [String:Any]{
-                   
-                   
+                   print(successData)
                 }
             }) { (responseFail) in
                 DispatchQueue.main.async {
@@ -105,7 +141,7 @@ class ForgotPasswordViewController: UIViewController {
                     }
                 }
             }
-        }
+        }*/
     }
     // MARK: - Navigation
     // In a storyboard-based application, you will often want to do a little preparation before navigation

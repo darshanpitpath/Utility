@@ -11,6 +11,71 @@ import UIKit
 
 let kUserDefault = UserDefaults.standard
 let kUserDetail = "UserDetail"
+let kParentUserDetail = "ParentUser"
+
+struct ParentUser :Codable {
+    var accessToken,countrycode,email,image,name,phone:String
+    var id:Int
+    enum CodingKeys:String, CodingKey {
+        case id
+        case accessToken = "access_token"
+        case countrycode = "country_code"
+        case email
+        case image
+        case name
+        case phone
+    }
+}
+extension ParentUser{
+    
+    static var isUserLoggedIn:Bool{
+        if let userDetail  = kUserDefault.value(forKey: kParentUserDetail) as? Data{
+            return self.isValiduserDetail(data: userDetail)
+        }else{
+          return false
+        }
+    }
+    func setuserDetailToUserDefault(){
+        do{
+            let userDetail = try JSONEncoder().encode(self)
+            kUserDefault.setValue(userDetail, forKey:kParentUserDetail)
+            kUserDefault.synchronize()
+        }catch{
+            DispatchQueue.main.async {
+                ShowToast.show(toatMessage: kCommonError)
+            }
+        }
+    }
+    static func isValiduserDetail(data:Data)->Bool{
+        do {
+            let _ = try JSONDecoder().decode(User.self, from: data)
+            return true
+        }catch{
+            return false
+        }
+    }
+    static func getUserFromUserDefault() -> ParentUser?{
+        if let userDetail = kUserDefault.value(forKey: kParentUserDetail) as? Data{
+            do {
+                let user:ParentUser = try JSONDecoder().decode(ParentUser.self, from: userDetail)
+                return user
+            }catch{
+                DispatchQueue.main.async {
+                    ShowToast.show(toatMessage: kCommonError)
+                }
+                return nil
+            }
+        }
+        DispatchQueue.main.async {
+            //ShowToast.show(toatMessage: kCommonError)
+        }
+        return nil
+    }
+    static func removeUserFromUserDefault(){
+        kUserDefault.removeObject(forKey:kParentUserDetail)
+    }
+    
+}
 
 class User: NSObject,Codable {
     

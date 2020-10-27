@@ -8,6 +8,7 @@
 
 import UIKit
 import MobileCoreServices
+import MaterialTextField
 
 class SignUpViewController: UIViewController {
     
@@ -20,10 +21,14 @@ class SignUpViewController: UIViewController {
     
     @IBOutlet var lblTermsAndCondition:UILabel!
     
-    @IBOutlet var txtDisplayName:UITextField!
-    @IBOutlet var txtEmail:UITextField!
-    @IBOutlet var txtPassword:UITextField!
-    @IBOutlet var txtConfirmPassword:UITextField!
+    @IBOutlet var txtDisplayName:MFTextField!
+    @IBOutlet var txtEmail:MFTextField!
+    @IBOutlet var txtPassword:MFTextField!
+    @IBOutlet var txtConfirmPassword:MFTextField!
+    @IBOutlet weak var txtPhoneNumber:MFTextField!
+    @IBOutlet weak var imageViewCountryCode:UIImageView!
+    @IBOutlet weak var lblCountryCode:UILabel!
+    
     
     @IBOutlet var buttonCamera:UIButton!
     
@@ -35,8 +40,13 @@ class SignUpViewController: UIViewController {
     var userProfileImage:UIImage?
     var objPassword:UIButton?
     var objConfirmPassword:UIButton?
+    
     var addUserParameters:[String:Any] = [:]
-    private var isterms:Bool = false
+    var arrayOfCountryCode:[Country] = []
+    var currentSelectedCountry:Country?
+    
+    
+    private var isterms:Bool = true
        var istermsAccepted:Bool{
            get{
                return isterms
@@ -54,8 +64,7 @@ class SignUpViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
-        self.setUp()
+        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -65,16 +74,54 @@ class SignUpViewController: UIViewController {
         self.configureTermsAndCondition()
         self.configurePasswordTextField()
         self.configureConfirmPasswordTextField()
+        // Do any additional setup after loading the view.
+        self.setUp()
     }
     func setUp(){
-        self.txtDisplayName.placeholder = "UserName"
-        self.txtEmail.placeholder = "Email"
-        self.txtPassword.placeholder = "Password"
-        self.txtConfirmPassword.placeholder = "Confirm Password"
-         self.txtDisplayName.delegate = self
-         self.txtEmail.delegate = self
-         self.txtPassword.delegate = self
-         self.txtConfirmPassword.delegate = self
+        self.txtDisplayName.setUpWithPlaceHolder(strPlaceHolder: "UserName", isWhiteBackground:  UITraitCollection.current.userInterfaceStyle != .dark, errorColor: UIColor.red)
+        self.txtPhoneNumber.setUpWithPlaceHolder(strPlaceHolder: "Phone Number", isWhiteBackground:  UITraitCollection.current.userInterfaceStyle != .dark, errorColor: UIColor.red)
+        self.txtEmail.setUpWithPlaceHolder(strPlaceHolder: "Email", isWhiteBackground:  UITraitCollection.current.userInterfaceStyle != .dark, errorColor: UIColor.red)
+        self.txtPassword.setUpWithPlaceHolder(strPlaceHolder: "Password", isWhiteBackground:  UITraitCollection.current.userInterfaceStyle != .dark, errorColor: UIColor.red)
+        self.txtConfirmPassword.setUpWithPlaceHolder(strPlaceHolder: "Confirm Password", isWhiteBackground:  UITraitCollection.current.userInterfaceStyle != .dark, errorColor: UIColor.red)
+        self.txtDisplayName.delegate = self
+        self.txtPhoneNumber.delegate = self
+        self.txtEmail.delegate = self
+        self.txtPassword.delegate = self
+        self.txtConfirmPassword.delegate = self
+        
+        //NAVIGATION BAR SETUP
+        self.title = "Sign Up"
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.navigationItem.largeTitleDisplayMode = .always
+         //loadCountry JSON
+        self.loadCountryJSON()
+    }
+    //MARK: - Read COUNTRY JSON file
+    func loadCountryJSON(){
+        if let filePath = Bundle.main.path(forResource: "country", ofType: "json"){
+            do {
+                let objJSONData = try Data.init(contentsOf: URL.init(fileURLWithPath: filePath), options: .dataReadingMapped)
+                
+                if let arrayCountryJSON = try JSONSerialization.jsonObject(with: objJSONData, options: .mutableContainers) as? [Any]{
+                            self.arrayOfCountryCode.removeAll()
+                            for objCountryJSON in arrayCountryJSON{
+                               let objJSONData = try JSONSerialization.data(withJSONObject: objCountryJSON, options: .fragmentsAllowed)
+                               let objCountry = try JSONDecoder().decode(Country.self, from: objJSONData)
+                                self.arrayOfCountryCode.append(objCountry)
+                            }
+                    print("======= \(self.arrayOfCountryCode.count) =======")
+                    //"US" "+1"
+                    let filterArray = self.arrayOfCountryCode.filter{ $0.code == "US" && $0.dialcode == "+1"}
+                    if filterArray.count > 0{
+                        self.configureSelectedCountryCode(objCountry: filterArray.first!)
+                    }
+                    print(filterArray)
+                }
+            }catch{
+                print(error.localizedDescription)
+            }
+            
+        }
     }
     func configurePasswordTextField(){
         self.txtPassword.isSecureTextEntry = true
@@ -96,8 +143,8 @@ class SignUpViewController: UIViewController {
     }
     func configureBackSelector(){
           let objIMage = UIImage.init(named: "back")?.withRenderingMode(.alwaysTemplate)
-          self.buttonBack.setImage(objIMage, for: .normal)
-          self.buttonBack.tintColor = UIColor.label
+//          self.buttonBack.setImage(objIMage, for: .normal)
+//          self.buttonBack.tintColor = UIColor.label
     }
     func configureSignUpSelector(){
         self.buttonSignUp.layer.cornerRadius = 8.0
@@ -163,11 +210,98 @@ class SignUpViewController: UIViewController {
                 popoverController.sourceView = self.buttonCamera
                 
             }
+            actionSheetController.view.tintColor = UIColor.label
             self.present(actionSheetController, animated: true, completion: nil)
         }
     func presentImagePickerController(){
         self.view.endEditing(true)
         self.present(self.objImagePickerController, animated: true, completion: nil)
+    }
+    //Configure Selected Country
+    func configureSelectedCountryCode(objCountry:Country){
+        self.currentSelectedCountry = objCountry
+        DispatchQueue.main.async {
+            self.imageViewCountryCode.image = UIImage.init(named: "\(objCountry.code)")
+            self.lblCountryCode.text = "\(objCountry.dialcode)"
+        }
+    }
+    //Sign up screen validation
+    func isValidSignUp()-> Bool{
+       guard self.istermsAccepted else {
+                //self.view.showToast(message:"Please select terms and conditions.", isBlack:false)
+                ShowToast.show(toatMessage: "Please select terms and conditions.")
+                return false
+            }
+        guard let _ = self.userProfileImage else {
+            DispatchQueue.main.async {
+                self.buttonAddImage.invalideField()
+                //self.buttonParentImage.invalideField()
+                //self.view.showToast(message:"Please select profile image.", isBlack:false)
+                ShowToast.show(toatMessage: "Please select profile image.")
+            }
+            return false
+        }
+        guard "\(self.addUserParameters["name"] ?? "")".count > 0 else {
+            DispatchQueue.main.async {
+                self.txtDisplayName.invalideFieldWithError(strError: "Please enter valid name")
+            }
+            return false
+        }
+        guard "\(self.addUserParameters["phone"] ?? "")".count > 0 else {
+            DispatchQueue.main.async {
+                self.txtPhoneNumber.invalideFieldWithError(strError: "Please enter valid phone number")
+            }
+            return false
+        }
+        guard "\(self.addUserParameters["email"] ?? "")".count > 0 else {
+            DispatchQueue.main.async {
+                self.txtEmail.invalideFieldWithError(strError: "Please enter valid email address.")
+            }
+            return false
+        }
+        if let emailText:String = self.addUserParameters["email"] as? String,!emailText.isValidEmail(){
+            DispatchQueue.main.async {
+                self.txtEmail.invalideFieldWithError(strError: "Please enter valid email address.")
+            }
+            return false
+        }
+        
+        guard "\(self.addUserParameters["password"] ?? "")".count > 0 else {
+            DispatchQueue.main.async {
+                self.txtPassword.invalideFieldWithError(strError: "Please enter valid password")
+            }
+            return false
+        }
+        guard "\(self.addUserParameters["confirm_password"] ?? "")".count > 0 else {
+            DispatchQueue.main.async {
+                self.txtConfirmPassword.invalideFieldWithError(strError: "Please enter valid confirm password")
+            }
+            return false
+        }
+        guard "\(self.addUserParameters["confirm_password"] ?? "")" == "\(self.addUserParameters["password"] ?? "")"  else {
+            DispatchQueue.main.async {
+                self.txtConfirmPassword.invalideFieldWithError(strError: "Confirm password not match to password")
+            }
+            return false
+        }
+        guard "\(self.addUserParameters["phone"] ?? "")".count > 0 else {
+            DispatchQueue.main.async {
+                self.txtPhoneNumber.invalideFieldWithError(strError: "Please enter valid phone number")
+            }
+            return false
+        }
+        guard self.istermsAccepted else {
+            //self.view.showToast(message:"Please select terms and conditions.", isBlack:false)
+            ShowToast.show(toatMessage: "Please select terms and conditions.")
+            return false
+        }
+        self.txtDisplayName.validateField()
+        self.txtEmail.validField()
+        self.txtPassword.validField()
+        self.txtConfirmPassword.validateField()
+        self.txtPhoneNumber.validateField()
+        
+        return true
     }
     // MARK: - Selector Methods
     @IBAction func hideKeyBoard(){
@@ -182,7 +316,10 @@ class SignUpViewController: UIViewController {
         self.istermsAccepted = !self.istermsAccepted
     }
     @IBAction func buttonSignUpSelector(sender:UIButton){
-        
+        //Check for Sing up validation
+        if self.isValidSignUp(){
+            //Request sign up API
+        }
     }
     @IBAction func buttonUploadImageSelector(sender:UIButton){
            self.presentUploadImageActionSheet()
@@ -223,13 +360,22 @@ class SignUpViewController: UIViewController {
         
         if gesture.didTapAttributedTextInLabel(label: self.lblTermsAndCondition, inRange: termsRange) {
             print("Tapped terms")
+            if let objWebURLController = self.storyboard?.instantiateViewController(withIdentifier: "WebURLLoaderViewController") as? WebURLLoaderViewController{
+                objWebURLController.modalPresentationStyle = .fullScreen
+                //self.navigationController?.modalPresentationStyle = .fullScreen
+                self.navigationController?.present(objWebURLController, animated: true, completion: nil)
+            }
+            /*
             if let objURL = URL.init(string:termsConditionsURL){
                 if UIApplication.shared.canOpenURL(objURL){
                     UIApplication.shared.open(objURL, options: [:], completionHandler: nil)
                 }
-            }
+            }*/
             
         }
+    }
+    @IBAction func buttonCountryCodeSelector(sender:UIButton){
+        self.presentCountryPicker(arrayOfCountry: self.arrayOfCountryCode)
     }
     // MARK: - Navigation
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -237,8 +383,32 @@ class SignUpViewController: UIViewController {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
     }
+    //PESENT COUNTRY PICKER
+    func presentCountryPicker(arrayOfCountry:[Country]){
+        //present country picker
+         if let objCountrypickerViewController = self.storyboard?.instantiateViewController(withIdentifier: "CountryCodePickerViewController") as? CountryCodePickerViewController{
+             objCountrypickerViewController.modalPresentationStyle = .overCurrentContext
+             objCountrypickerViewController.arrayOfCountry = arrayOfCountry
+            if let objCountry = self.currentSelectedCountry{
+                objCountrypickerViewController.selectedCountry = objCountry
+            }
+            objCountrypickerViewController.delegate = self
+            let objNavigationController = UINavigationController.init(rootViewController: objCountrypickerViewController)
+            
+//            self.present(objNavigationController, animated: true, completion: nil)
+            self.navigationController?.present(objCountrypickerViewController, animated: true, completion: nil)
+         }
+    }
     
 
+}
+extension SignUpViewController:CountryCodePickerDelegate{
+    func didSelectCountryCodePicker(countryCode: Country) {
+        DispatchQueue.main.async {
+            self.txtPhoneNumber.becomeFirstResponder()
+            self.configureSelectedCountryCode(objCountry: countryCode)
+        }
+    }
 }
 extension SignUpViewController:UITextFieldDelegate{
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -249,8 +419,11 @@ extension SignUpViewController:UITextFieldDelegate{
                 return false
             }
         }
+        (textField as? MFTextField)?.validateField()
         if textField == self.txtDisplayName{
             self.addUserParameters["name"] = "\(typpedString)"
+        }else if textField == self.txtPhoneNumber{
+            self.addUserParameters["phone"] = "\(typpedString)"
         }else if textField == self.txtEmail{
             self.addUserParameters["email"] = "\(typpedString)"
         }else if textField == self.txtPassword{
@@ -260,6 +433,7 @@ extension SignUpViewController:UITextFieldDelegate{
         }else{
            
         }
+        print(self.addUserParameters)
         return true
     }
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
@@ -291,12 +465,16 @@ extension SignUpViewController:UIImagePickerControllerDelegate,UINavigationContr
             return
         }
         guard let editedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage else {
+            
             dismiss(animated: false, completion: nil)
             return
         }
+        print(editedImage)
         picker.dismiss(animated: true, completion: nil)
         self.userProfileImage = originalImage
         self.buttonUploadImage.setImage(originalImage, for: .normal)
+        
+        
        //self.buttonParentImage.setBackgroundImage(originalImage, for: .normal)
        //self.presentImageEditor(image: originalImage)
     }
